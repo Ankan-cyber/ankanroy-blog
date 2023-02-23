@@ -1,0 +1,65 @@
+{
+  "title": "JavaScript vs Java: What's the Difference?",
+  "author": "Ankan Roy",
+  "date": "2023-02-23",
+  "metaDescription": "JavaScript vs Java: What's the Difference? This blog post provides a comprehensive guide on the differences between JavaScript and Java, two popular programming languages often confused for one another.",
+  "imageUrl": "https://www.venturelessons.com/wp-content/uploads/2019/09/java-vs-javascript.jpg",
+  "blogUrl": "diff-js-java",
+  "tag": "Technology",
+  "content": [
+    {
+      "type": "heading",
+      "text": "Introduction"
+    },
+    {
+      "type": "paragraph",
+      "text": "JavaScript and Java are two popular programming languages used for developing various applications. Although both languages share some similarities, they are fundamentally different in terms of their syntax, use cases, and the way they are executed."
+    },
+    {
+      "type": "heading",
+      "text": "Syntax"
+    },
+    {
+      "type": "paragraph",
+      "text": "One of the most obvious differences between JavaScript and Java is their syntax. JavaScript is a scripting language that is lightweight and interpreted, which means it does not need to be compiled before execution. The syntax is similar to other scripting languages like Python and Ruby, making it easier for beginners to learn."
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "text": "const greeting = 'Hello, world!';\nconsole.log(greeting);"
+    },
+    {
+      "type": "paragraph",
+      "text": "On the other hand, Java is an object-oriented programming language that is statically typed and compiled. This means that the code needs to be compiled before execution, which adds an extra step in the development process. The syntax is more verbose than JavaScript, making it more difficult for beginners to learn."
+    },
+    {
+      "type": "code",
+      "language": "java",
+      "text": "public class HelloWorld {\n    public static void main(String[] args) {\n        String greeting = \"Hello, world!\";\n        System.out.println(greeting);\n    }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Use Cases"
+    },
+    {
+      "type": "paragraph",
+      "text": "JavaScript is primarily used for front-end web development, such as creating dynamic web pages and user interfaces. It can also be used for back-end development with frameworks like Node.js. Java, on the other hand, is used for a wide range of applications, including web development, mobile app development, and enterprise software development."
+    },
+    {
+      "type": "heading",
+      "text": "Execution"
+    },
+    {
+      "type": "paragraph",
+      "text": "JavaScript is executed by the browser's JavaScript engine, while Java is executed by the Java Virtual Machine (JVM). JavaScript code is interpreted at runtime, which makes it slower than Java. Java code, on the other hand, is compiled to bytecode, which is executed by the JVM. This makes Java faster than JavaScript in terms of execution speed."
+    },
+    {
+      "type": "heading",
+      "text": "Conclusion"
+    },
+    {
+      "type": "paragraph",
+      "text": "JavaScript and Java are two different programming languages that have different use cases and syntax. JavaScript is a lightweight and interpreted language primarily used for front-end web development, while Java is an object-oriented language used for a wide range of applications. Both languages have their pros and cons, and the choice between them depends on the specific needs of the project."
+    }
+  ]
+}

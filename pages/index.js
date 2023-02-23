@@ -1,123 +1,140 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import Head from "next/head";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+
+  const [blogs, setBlogs] = useState([])
+
+
+  useEffect(() => {
+    fetch('/api/blogs').then((a) => {
+      return a.json();
+    })
+      .then((parsed) => {
+        setBlogs(parsed)
+      })
+  }, [])
+
   return (
     <>
       <Head>
         <title>Blog By Ankan Roy</title>
         <meta name="description" content="Blog By Ankan Roy" />
+        <meta
+          name="keywords"
+          content="ankanroy, ankanroy blogs, blogs tech, web development, ankanroy.in"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+
+      <main className="main pt-4">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-9">
+              {
+                blogs.map((e) => {
+                  return (
+                    <article className="card mb-4" key={e.title}>
+                      <header className="card-header">
+                        <div className="card-meta">
+                          <time className="timeago">
+                            {e.date}
+                          </time>{" "}
+                          in <Link href="/category">{e.tag}</Link>
+                          {" "} by {e.author}
+                        </div>
+                        <Link href={`/blogpost/${e.blogUrl}`}>
+                          <h4 className="card-title">
+                            {e.title}
+                          </h4>
+                        </Link>
+                      </header>
+                      <Link href={`/blogpost/${e.blogUrl}`}>
+                        <img
+                          className="card-img"
+                          src={e.imageUrl}
+                          alt=""
+                        />
+                      </Link>
+                      <div className="card-body">
+                        <p className="card-text">
+                          {e.metaDescription}
+                        </p>
+                      </div>
+                    </article>
+                  )
+                })
+              }
+            </div>
+            <div className="col-md-3 ms-auto">
+              <aside className="sidebar sidebar-sticky">
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h4 className="card-title">Tags</h4>
+                    <Link
+                      className="btn btn-light btn-sm mb-1"
+                      href="page-category.html"
+                    >
+                      Journey
+                    </Link>
+                    <Link
+                      className="btn btn-light btn-sm mb-1"
+                      href="page-category.html"
+                    >
+                      Work
+                    </Link>
+                    <Link
+                      className="btn btn-light btn-sm mb-1"
+                      href="page-category.html"
+                    >
+                      Lifestype
+                    </Link>
+                    <Link
+                      className="btn btn-light btn-sm mb-1"
+                      href="page-category.html"
+                    >
+                      Photography
+                    </Link>
+                    <Link
+                      className="btn btn-light btn-sm mb-1"
+                      href="page-category.html"
+                    >
+                      Food & Drinks
+                    </Link>
+                  </div>
+                </div>
+                <div className="card mb-4">
+                  <div className="card-body">
+                    <h4 className="card-title">Popular stories</h4>
+                    {
+                      blogs.slice(2, 3).map((e) => {
+                        return (
+                          <>
+                            <Link href={`/blogpost/${e.blogUrl}`} className="d-inline-block">
+                              <h4 className="h6">{e.title}</h4>
+                              <img
+                                className="card-img"
+                                src={e.imageUrl}
+                                alt=""
+                              />
+                            </Link>
+                            <time className="timeago" dateTime={e.date}>
+                              {e.date}
+                            </time>{" "}
+                            in {e.tag}
+                          </>
+                        )
+                      })
+                    }
+                  </div>
+                </div>
+              </aside>
+            </div>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
         </div>
       </main>
     </>
-  )
+  );
 }
