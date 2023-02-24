@@ -1,23 +1,12 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-const slug = () => {
+const Slug = (props) => {
 
-    const [blog, setBlog] = useState();
+    const [blog, setBlog] = useState(props.myBlog);
 
-    const router = useRouter();
-    useEffect(() => {
-        if (!router.isReady) return;
-        const { slug } = router.query;
-        fetch(`/api/getblog?slug=${slug}`).then((a) => {
-            return a.json();
-        })
-            .then((parsed) => {
-                setBlog(parsed)
-            })
-    }, [router.isReady])
 
     return (
         <>
@@ -142,4 +131,15 @@ const slug = () => {
     )
 }
 
-export default slug
+export default Slug;
+
+export async function getServerSideProps(context) {
+
+    const { slug } = context.query;
+    let data = await fetch(`http://localhost:3000/api/getblog?slug=${slug}`)
+    let myBlog = await data.json()
+
+    return {
+        props: { myBlog }, // will be passed to the page component as props
+    }
+}
