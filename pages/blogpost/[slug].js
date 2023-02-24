@@ -1,7 +1,7 @@
-import { useRouter } from 'next/router'
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
+import * as fs from 'fs';
 
 const Slug = (props) => {
 
@@ -93,33 +93,26 @@ const Slug = (props) => {
                                 <div className="card mb-4">
                                     <div className="card-body">
                                         <h4 className="card-title">Popular stories</h4>
-                                        <Link href="post-image.html" className="d-inline-block">
-                                            <h4 className="h6">The blind man</h4>
-                                            <img
-                                                className="card-img"
-                                                src="https://milo.bootlab.io/img/articles/2.jpg"
-                                                alt=""
-                                            />
-                                        </Link>
-                                        <time className="timeago" dateTime="2021-09-03 20:00">
-                                            3 october 2021
-                                        </time>{" "}
-                                        in Lifestyle
-                                        <Link
-                                            href="post-image.html"
-                                            className="d-inline-block mt-3"
-                                        >
-                                            <h4 className="h6">Crying on the news</h4>
-                                            <img
-                                                className="card-img"
-                                                src="https://milo.bootlab.io/img/articles/3.jpg"
-                                                alt=""
-                                            />
-                                        </Link>
-                                        <time className="timeago" dateTime="2021-07-16 20:00">
-                                            16 july 2021
-                                        </time>{" "}
-                                        in Work
+                                        {props.allBlogs &&
+                                            props.allBlogs.slice(1, 3).map((e) => {
+                                                return (
+                                                    <>
+                                                        <Link href={`/blogpost/${e.blogUrl}`} className="d-inline-block">
+                                                            <h4 className="h6">{e.title}</h4>
+                                                            <img
+                                                                className="card-img"
+                                                                src={e.imageUrl}
+                                                                alt=""
+                                                            />
+                                                        </Link>
+                                                        <time className="timeago" dateTime={e.date}>
+                                                            {e.date}
+                                                        </time>{" "}
+                                                        in {e.tag}
+                                                    </>
+                                                )
+                                            })
+                                        }
                                     </div>
                                 </div>
                             </aside>
@@ -133,13 +126,31 @@ const Slug = (props) => {
 
 export default Slug;
 
-export async function getServerSideProps(context) {
-
-    const { slug } = context.query;
-    let data = await fetch(`http://localhost:3000/api/getblog?slug=${slug}`)
-    let myBlog = await data.json()
-
+export async function getStaticPaths() {
+    let data = await fs.promises.readdir("blogdata");
+    let paths = [];
+    let myfile;
+    data.map((e) => {
+        myfile = { params: { slug: e } }
+        paths.push(myfile)
+    })
     return {
-        props: { myBlog }, // will be passed to the page component as props
+        paths: paths,
+        fallback: true // false or 'blocking'
+    };
+}
+export async function getStaticProps(context) {
+    const { slug } = context.params;
+    let myfile;
+    let allBlogs = [];
+    let myBlog = await fs.promises.readFile(`blogdata/${slug}.json`, 'utf-8')
+    let data = await fs.promises.readdir("blogdata");
+    for (let index = 0; index < data.length; index++) {
+        const item = data[index];
+        myfile = await fs.promises.readFile(('blogdata/' + item), 'utf-8')
+        allBlogs.push(JSON.parse(myfile))
+    }
+    return {
+        props: { myBlog: JSON.parse(myBlog), allBlogs }, // will be passed to the page component as props
     }
 }
