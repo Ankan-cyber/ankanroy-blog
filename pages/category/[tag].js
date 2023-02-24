@@ -1,56 +1,64 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import { useState } from 'react';
-import * as fs from 'fs';
+import Link from 'next/link'
+import * as fs from 'fs'
 
-const Slug = (props) => {
-
-    const [blog, setBlog] = useState(props.myBlog);
-
+const Tag = (props) => {
 
     return (
         <>
-            <Head>
-                <title>{blog && blog.title}</title>
-                <meta name="description" content={blog && blog.metaDescription} />
-            </Head>
             <main className="main pt-4">
+
                 <div className="container">
+
                     <div className="row">
                         <div className="col-md-9">
-                            <article className="card mb-4">
-                                <header className="card-header text-center">
-                                    <div className="card-meta">
-                                        <time className="timeago">
-                                            {blog && blog.date}
-                                        </time>{" "}
-                                        in <Link href={`/category/${blog && blog.tag}`}>{blog && blog.tag}</Link>
-                                        {" "} by {blog && blog.author}
-                                    </div>
-                                    <h1 className="card-title">{blog && blog.title}</h1>
-                                </header>
-                                <img className="card-img" src={blog && blog.imageUrl} alt="" />
 
-                                <div className="card-body">
-                                    {blog && blog.content.map((item, index) => {
-                                        if (item.type === "heading") {
-                                            return <h3 key={index}>{item.text}</h3>
-                                        }
-                                        else if (item.type === "paragraph") {
-                                            return <p key={index}>{item.text}</p>
-                                        }
-                                        else if (item.type === "code") {
-                                            return <pre key={index}>
-                                                <code>{item.text}</code>
-                                            </pre>
-                                        }
-                                        else {
-                                            return ""
-                                        }
-                                    })}
+                            <div className="text-center">
+                                <span className="text-muted">Category:</span>
+                                <h2>{props.tag}</h2>
+                                <hr />
+                            </div>
 
-                                </div>
-                            </article>
+                            <div className="row">
+                                {props.allBlogs &&
+                                    props.allBlogs.map((e) => {
+                                        if (e.tag === props.tag) {
+                                            return (
+                                                <div className="col-md-6" key={e.title}>
+                                                    <article className="card mb-4" key={e.title}>
+                                                        <header className="card-header">
+                                                            <div className="card-meta">
+                                                                <time className="timeago">
+                                                                    {e.date}
+                                                                </time>{" "}
+                                                                in <Link href="/category">{e.tag}</Link>
+                                                                {" "} by {e.author}
+                                                            </div>
+                                                            <Link href={`/blogpost/${e.blogUrl}`}>
+                                                                <h4 className="card-title">
+                                                                    {e.title}
+                                                                </h4>
+                                                            </Link>
+                                                        </header>
+                                                        <Link href={`/blogpost/${e.blogUrl}`}>
+                                                            <img
+                                                                className="card-img"
+                                                                src={e.imageUrl}
+                                                                alt=""
+                                                            />
+                                                        </Link>
+                                                        <div className="card-body">
+                                                            <p className="card-text">
+                                                                {e.metaDescription}
+                                                            </p>
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
+
                         </div>
                         <div className="col-md-3 ms-auto">
                             <aside className="sidebar sidebar-sticky">
@@ -106,19 +114,20 @@ const Slug = (props) => {
                         </div>
                     </div>
                 </div>
+
             </main>
         </>
     )
 }
 
-export default Slug;
+export default Tag;
 
 export async function getStaticPaths() {
     let data = await fs.promises.readdir("blogdata");
     let paths = [];
     let myfile;
     data.map((e) => {
-        myfile = { params: { slug: e.replace(".json", "") } }
+        myfile = { params: { tag: e.replace(".json", "") } }
         paths.push(myfile)
     })
     return {
@@ -127,17 +136,17 @@ export async function getStaticPaths() {
     };
 }
 export async function getStaticProps(context) {
-    const { slug } = context.params;
+    const { tag } = context.params;
+    let data = await fs.promises.readdir("blogdata");
     let myfile;
     let allBlogs = [];
-    let data = await fs.promises.readdir("blogdata");
     for (let index = 0; index < data.length; index++) {
         const item = data[index];
         myfile = await fs.promises.readFile(('blogdata/' + item), 'utf-8')
         allBlogs.push(JSON.parse(myfile))
     }
-    let myBlog = await fs.promises.readFile(`blogdata/${slug}.json`, 'utf-8')
+
     return {
-        props: { myBlog: JSON.parse(myBlog), allBlogs }, // will be passed to the page component as props
+        props: { allBlogs, tag }, // will be passed to the page component as props
     }
 }

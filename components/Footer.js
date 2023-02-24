@@ -33,7 +33,7 @@ const Footer = () => {
                 </div>
             </div>*/}
 
-            <footer className="site-footer bg-dark" style={{ boxShadow: "0 0 20px 5px #5d0320" }}>
+            <footer className="site-footer " style={{ boxShadow: "0 0 20px 5px #5d0320" }}>
                 <div className="container">
                     <ul className="nav justify-content-center">
                         <li className="nav-item">

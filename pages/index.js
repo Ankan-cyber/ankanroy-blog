@@ -18,7 +18,6 @@ export default function Home(props) {
           content="ankanroy, ankanroy blogs, blogs tech, web development, ankanroy.in"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="main pt-4">
@@ -34,7 +33,7 @@ export default function Home(props) {
                           <time className="timeago">
                             {e.date}
                           </time>{" "}
-                          in <Link href="/category">{e.tag}</Link>
+                          in <Link href={`/category/${e.tag}`}>{e.tag}</Link>
                           {" "} by {e.author}
                         </div>
                         <Link href={`/blogpost/${e.blogUrl}`}>
@@ -67,33 +66,21 @@ export default function Home(props) {
                     <h4 className="card-title">Tags</h4>
                     <Link
                       className="btn btn-light btn-sm mb-1"
-                      href="page-category.html"
+                      href="/category/technology"
                     >
-                      Journey
+                      Technology
                     </Link>
                     <Link
                       className="btn btn-light btn-sm mb-1"
-                      href="page-category.html"
+                      href="/category/general"
                     >
-                      Work
+                      General
                     </Link>
                     <Link
                       className="btn btn-light btn-sm mb-1"
-                      href="page-category.html"
-                    >
-                      Lifestype
-                    </Link>
-                    <Link
-                      className="btn btn-light btn-sm mb-1"
-                      href="page-category.html"
+                      href="/category/photography"
                     >
                       Photography
-                    </Link>
-                    <Link
-                      className="btn btn-light btn-sm mb-1"
-                      href="page-category.html"
-                    >
-                      Food & Drinks
                     </Link>
                   </div>
                 </div>
@@ -103,7 +90,7 @@ export default function Home(props) {
                     {blogs &&
                       blogs.slice(1, 3).map((e) => {
                         return (
-                          <>
+                          <div key={e.blogUrl}>
                             <Link href={`/blogpost/${e.blogUrl}`} className="d-inline-block">
                               <h4 className="h6">{e.title}</h4>
                               <img
@@ -116,7 +103,7 @@ export default function Home(props) {
                               {e.date}
                             </time>{" "}
                             in {e.tag}
-                          </>
+                          </div>
                         )
                       })
                     }
